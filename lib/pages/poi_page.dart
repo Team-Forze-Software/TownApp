@@ -22,24 +22,19 @@ class _POIPageState extends State<POIPage> {
             Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Nombre POI',
+                children: const [
+                  Text(
+                    'Cerro Cristo Rey',
                     style: TextStyle(
                       color: Colors.blue,
                       fontWeight: FontWeight.bold,
                       fontSize: 30,
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 20,
                   ),
-                  Image.network(
-                    "https://via.placeholder.com/200?text=Placeholder",
-                    height: 300,
-                    width: 300,
-                    fit: BoxFit.fitWidth,
-                  ),
+                  Image(image: AssetImage("assets/images/cristoret.PNG")),
                 ],
               ),
             ),
@@ -49,21 +44,22 @@ class _POIPageState extends State<POIPage> {
             Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
-                  Text('Ciudad: XXXXXX'),
-                  Text('Departamento: XXXXXX'),
-                  Text('Temperatura: XX'),
+                  Text('Ciudad: Ciudad Bolivar'),
+                  Text('Departamento: Antioquia'),
+                  Text('Temperatura: 16°C - 24°C'),
                   SizedBox(
                     height: 10,
                   ),
                   Text(
-                    "Descripción: Sed ut perspiciatus, unde omnis iste natus error "
-                    "sit voluptatem accusant doloremque laudantium, totam "
-                    "rem apreiam eaque ipsa, quae ab itlo inventore veritatis."
+                      "Es un mirador importante del Ciudad Bolívar. Tiene en su extensión senderos de adoquines, teatro al aire libre, "
+                          "plataformas para vuelo de cometas y un cristo redentor en su cima. es de fácil acceso para todo tipo de publico"
+
+                  "Dirección: Ubicado al costado norte del parque principal Simón Bolívar."
                   ),
                   SizedBox(
                     height: 10,
                   ),
-                  Text("Otra información de interés."),
+
                 ]
             )
           ],
