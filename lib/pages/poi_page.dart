@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:town_app/pages/poi_list.dart';
 
 class POIPage extends StatefulWidget {
   final String documentId;
@@ -18,6 +19,13 @@ class _POIPageState extends State<POIPage> {
     final String document = widget.documentId;
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          tooltip: "Retroceder",
+          onPressed: () {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const POIList()));
+          },
+        ),
         title: const Text('Detalle Sitio Turístico POI'),
       ),
       body: Padding(

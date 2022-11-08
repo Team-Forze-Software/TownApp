@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:town_app/pages/poi_page.dart';
+import 'package:town_app/pages/poi_list.dart';
 import 'package:town_app/pages/register_page.dart';
 import '../models/user.dart';
 
@@ -14,7 +14,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _isObscure = true;
   final _email = TextEditingController();
   final _password = TextEditingController();
-  User userLoad = User.Empty();
+  User userLoad = User.empty();
 
   @override
   void initState() {
@@ -27,7 +27,9 @@ class _LoginPageState extends State<LoginPage> {
       SnackBar(
         content: Text(msg),
         action: SnackBarAction(
-            label: "Aceptar", onPressed: scaffold.hideCurrentSnackBar),
+          label: "Aceptar",
+          onPressed: scaffold.hideCurrentSnackBar,
+        ),
       ),
     );
   }
@@ -35,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
   void _validateUser() {
     if (_email.text == "demo@demo.com" && _password.text == "pass") {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const POIPage(documentId: "AKMzhPHVm46DpRVlqwE0",)));
+          context, MaterialPageRoute(builder: (context) => const POIList()));
     } else {
       _showMsg("Correo o contraseña incorrecta");
     }
@@ -101,13 +103,16 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () {
                         _validateUser();
                       },
-                      child: const Text("Iniciar sesión")),
+                      child: const Text("Iniciar sesión"),
+                  ),
                   TextButton(
                     style: TextButton.styleFrom(
-                        textStyle: const TextStyle(
-                            fontSize: 16,
-                            fontStyle: FontStyle.italic,
-                            color: Colors.blue)),
+                      textStyle: const TextStyle(
+                          fontSize: 16,
+                          fontStyle: FontStyle.italic,
+                          color: Colors.blue,
+                      ),
+                    ),
                     onPressed: () {
                       Navigator.push(
                           context,
