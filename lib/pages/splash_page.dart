@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:town_app/pages/login_page.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:town_app/pages/register_page.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({Key? key}) : super(key: key);

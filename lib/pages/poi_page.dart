@@ -1,68 +1,69 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class POIPage extends StatefulWidget {
-  const POIPage({Key? key}) : super(key: key);
+  final String documentId;
+  const POIPage({Key? key, required this.documentId}) : super(key: key);
 
   @override
   State<POIPage> createState() => _POIPageState();
 }
 
 class _POIPageState extends State<POIPage> {
+  CollectionReference poiCollection =
+      FirebaseFirestore.instance.collection("points_of_interest");
+
   @override
   Widget build(BuildContext context) {
+    final String document = widget.documentId;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detalle Sitio Turístico POI'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
-                  Text(
-                    'Cerro Cristo Rey',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
+        child: FutureBuilder(
+          future: poiCollection.doc(document).get(),
+          builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (snapshot.hasError) {return Text("Error = ${snapshot.error}");}
+
+            if (snapshot.hasData) {
+              Map<String, dynamic> data = snapshot.data?.data() as Map<String, dynamic>;
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      data["name"],
+                      style: const TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Image(image: AssetImage("assets/images/cristoret.PNG")),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text('Ciudad: Ciudad Bolivar'),
-                  Text('Departamento: Antioquia'),
-                  Text('Temperatura: 16°C - 24°C'),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                      "Es un mirador importante del Ciudad Bolívar. Tiene en su extensión senderos de adoquines, teatro al aire libre, "
-                          "plataformas para vuelo de cometas y un cristo redentor en su cima. es de fácil acceso para todo tipo de publico"
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      height: 300,
+                      child: Image.network(
+                        data["photo_url"], fit: BoxFit.cover,),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(data["description"]),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text("Puntuación: ${"⭐" * data["punctuation"]}"),
+                  ],
+                ),
+              );
+            }
 
-                  "Dirección: Ubicado al costado norte del parque principal Simón Bolívar."
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-
-                ]
-            )
-          ],
+            return const Center(child: CircularProgressIndicator(),);
+          },
         ),
       ),
     );
