@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:town_app/pages/poi_list.dart';
 import 'package:town_app/pages/register_page.dart';
-import '../models/user.dart';
+import 'package:town_app/repositories/UserRepository.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _isObscure = true;
   final _email = TextEditingController();
   final _password = TextEditingController();
-  User userLoad = User.empty();
+  final UserRepository _userRepository = UserRepository();
 
   @override
   void initState() {
@@ -34,12 +34,24 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _validateUser() {
-    if (_email.text == "demo@demo.com" && _password.text == "pass") {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const POIList()));
+  void _validateUser() async {
+    if (_email.text.isEmpty || _password.text.isEmpty) {
+      _showMsg("Digite un usuario y una contraseña");
     } else {
-      _showMsg("Correo o contraseña incorrecta");
+      var result = await _userRepository.loginUser(_email.text, _password.text);
+      String msg = "";
+      if (result == "invalid-email") {msg = "Correo incorrecto";}
+      else if (result == "wrong-password") {msg = "Contraseña incorrecta";}
+      else if (result == "user-not-found") {msg = "No existe un usario con estos datos";}
+      else if (result == "network-request-failed") {msg = "Revise su conexión de red";}
+      else {
+        msg = "Bienvenido";
+        setState(() {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => const POIList()));
+        });
+      }
+      _showMsg(msg);
     }
   }
 

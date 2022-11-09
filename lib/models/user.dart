@@ -3,10 +3,10 @@ class User {
   var _name;
   var _email;
   var _password;
-  var _genre;
+  var _gender;
   var _bornDate;
 
-  User(this._name, this._email, this._password, this._genre, this._bornDate,);
+  User(this._name, this._email, this._password, this._gender, this._bornDate,);
 
   User.empty();
 
@@ -15,7 +15,7 @@ class User {
     _name = json['name'];
     _email = json['email'];
     _password = json['password'];
-    _genre = json['genre'];
+    _gender = json['gender'];
     _bornDate = json['bornDate'];
   }
 
@@ -24,7 +24,7 @@ class User {
     'name' : _name,
     'email' : _email,
     'password' : _password,
-    'genre' : _genre,
+    'gender' : _gender,
     'bornDate' : _bornDate,
   };
 

@@ -12,7 +12,7 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
-enum Genre { masculino, femenino }
+enum Gender { masculino, femenino }
 
 class _RegisterPageState extends State<RegisterPage> {
   UserRepository userRepository = UserRepository();
@@ -22,7 +22,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _repPassword = TextEditingController();
   bool _isObscure = true;
   bool _isObscure1 = true;
-  Genre? _genre = Genre.masculino;
+  Gender? _gender = Gender.masculino;
   String buttonMsg = "Fecha de nacimiento";
   TextEditingController dateinput = TextEditingController();
 
@@ -70,14 +70,9 @@ class _RegisterPageState extends State<RegisterPage> {
   void _onRegisterButtonClicked() {
     setState(() {
       if (_password.text == _repPassword.text) {
-        String genre = "Masculino";
-
-        if (_genre == Genre.femenino) {
-          genre = "Femenino";
-        }
-
+        String gender = _gender == Gender.masculino ? "Masculino" : "Femenino";
         var user = User(
-            _name.text, _email.text, _password.text, genre, dateinput.text);
+            _name.text, _email.text, _password.text, gender, dateinput.text);
         _registerUser(user);
       } else {
         _showMsg("Las contraseñas deben ser iguales");
@@ -97,6 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
       user.uid = result;
       saveUser(user);
     }
+    _showMsg(msg);
   }
 
   void saveUser(User user) async {
@@ -227,12 +223,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       Expanded(
                         child: ListTile(
                           title: const Text("Masculino"),
-                          leading: Radio<Genre>(
-                            value: Genre.masculino,
-                            groupValue: _genre,
-                            onChanged: (Genre? value) {
+                          leading: Radio<Gender>(
+                            value: Gender.masculino,
+                            groupValue: _gender,
+                            onChanged: (Gender? value) {
                               setState(() {
-                                _genre = value;
+                                _gender = value;
                               });
                             },
                           ),
@@ -241,12 +237,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       Expanded(
                         child: ListTile(
                           title: const Text("Femenino"),
-                          leading: Radio<Genre>(
-                            value: Genre.femenino,
-                            groupValue: _genre,
-                            onChanged: (Genre? value) {
+                          leading: Radio<Gender>(
+                            value: Gender.femenino,
+                            groupValue: _gender,
+                            onChanged: (Gender? value) {
                               setState(() {
-                                _genre = value;
+                                _gender = value;
                               });
                             },
                           ),
