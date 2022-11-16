@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:town_app/pages/login_page.dart';
-import 'package:town_app/repositories/UserRepository.dart';
+import 'package:town_app/repositories/user_repository.dart';
 import '../models/user.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -44,8 +44,7 @@ class _RegisterPageState extends State<RegisterPage> {
     if (pickedDate != null) {
       print(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-      print(
-          formattedDate); //formatted date output using intl package =>  2021-03-16
+      print(formattedDate); //formatted date output using intl package =>  2021-03-16
       //you can implement different kind of Date Format here according to your requirement
 
       setState(() {
@@ -71,8 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() {
       if (_password.text == _repPassword.text) {
         String gender = _gender == Gender.masculino ? "Masculino" : "Femenino";
-        var user = User(
-            _name.text, _email.text, _password.text, gender, dateinput.text);
+        var user = User("", _name.text, _email.text, _password.text, gender, dateinput.text);
         _registerUser(user);
       } else {
         _showMsg("Las contraseñas deben ser iguales");
@@ -89,7 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
     else if (result == "network-request-failed") {msg = "Revise la conexión de red";}
     else {
       msg = "Usuario registrado exitosamente";
-      user.uid = result;
+      user.uid = result ?? "";
       saveUser(user);
     }
     _showMsg(msg);

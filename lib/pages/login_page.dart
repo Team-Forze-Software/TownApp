@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:town_app/pages/poi_list.dart';
 import 'package:town_app/pages/register_page.dart';
-import 'package:town_app/repositories/UserRepository.dart';
+import 'package:town_app/repositories/user_repository.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

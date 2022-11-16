@@ -1,12 +1,14 @@
-class User {
-  var uid;
-  var _name;
-  var _email;
-  var _password;
-  var _gender;
-  var _bornDate;
+import 'package:town_app/pages/register_page.dart';
 
-  User(this._name, this._email, this._password, this._gender, this._bornDate,);
+class User {
+  String uid = "";
+  String _name = "Name";
+  String _email = "example@example.com";
+  String _password = "password";
+  String _gender = Gender.masculino.name;
+  String _bornDate = "2000-01-01";
+
+  User(this.uid, this._name, this._email, this._password, this._gender, this._bornDate,);
 
   User.empty();
 
