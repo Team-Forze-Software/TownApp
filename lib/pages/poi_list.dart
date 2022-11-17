@@ -54,7 +54,7 @@ class _POIListState extends State<POIList> {
                 itemCount: snapshot.data?.docs.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    onTap: () => Navigator.pushReplacement(
+                    onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => POIPage(
