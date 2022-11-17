@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:town_app/pages/poi_list.dart';
+import 'package:town_app/hive_boxes.dart';
+import 'package:town_app/models/local_poi.dart';
+import 'package:town_app/models/poi.dart';
 
 class POIPage extends StatefulWidget {
   final String documentId;
+
   const POIPage({Key? key, required this.documentId}) : super(key: key);
 
   @override
@@ -11,8 +14,28 @@ class POIPage extends StatefulWidget {
 }
 
 class _POIPageState extends State<POIPage> {
-  CollectionReference poiCollection =
-      FirebaseFirestore.instance.collection("points_of_interest");
+  CollectionReference poiCollection = FirebaseFirestore.instance.collection("points_of_interest");
+  IconData favoriteIcon = Icons.favorite_border;
+
+  void addPOIToFavorites(POI poi) {
+    if (HiveBoxes.getFavoritesBox().containsKey(poi.id)) {
+      HiveBoxes.getFavoritesBox().delete(poi.id);
+      setState(() {
+        favoriteIcon = Icons.favorite_border;
+      });
+    } else {
+      final localPoi = LocalPOI()
+        ..id = poi.id
+        ..name = poi.name
+        ..description = poi.description
+        ..photoUrl = poi.photoUrl
+        ..punctuation = poi.punctuation;
+      HiveBoxes.getFavoritesBox().put(poi.id, localPoi);
+      setState(() {
+        favoriteIcon = Icons.favorite;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +46,7 @@ class _POIPageState extends State<POIPage> {
           icon: const Icon(Icons.arrow_back),
           tooltip: "Retroceder",
           onPressed: () {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const POIList()));
+            Navigator.pop(context);
           },
         ),
         title: const Text('Detalle Sitio Turístico POI'),
@@ -33,7 +56,9 @@ class _POIPageState extends State<POIPage> {
         child: FutureBuilder(
           future: poiCollection.doc(document).get(),
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-            if (snapshot.hasError) {return Text("Error = ${snapshot.error}");}
+            if (snapshot.hasError) {
+              return Text("Error = ${snapshot.error}");
+            }
 
             if (snapshot.hasData) {
               Map<String, dynamic> data = snapshot.data?.data() as Map<String, dynamic>;
@@ -48,6 +73,14 @@ class _POIPageState extends State<POIPage> {
                         fontWeight: FontWeight.bold,
                         fontSize: 30,
                       ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        POI loadedPoi = POI.fromJson(data);
+                        loadedPoi.id = snapshot.data?.id ?? "";
+                        addPOIToFavorites(loadedPoi);
+                      },
+                      icon: Icon(favoriteIcon, color: Colors.redAccent,),
                     ),
                     const SizedBox(
                       height: 20,

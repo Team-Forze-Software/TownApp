@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:town_app/pages/favorites_list.dart';
 import 'package:town_app/pages/poi_page.dart';
 
 import 'login_page.dart';
@@ -12,7 +13,7 @@ class POIList extends StatefulWidget {
   State<POIList> createState() => _POIListState();
 }
 
-enum Menu { logOut }
+enum Menu { logOut, favorites }
 
 class _POIListState extends State<POIList> {
   CollectionReference poiData =
@@ -33,6 +34,13 @@ class _POIListState extends State<POIList> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => const LoginPage()));
+                } else if (item == Menu.favorites) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const FavoritesList(),
+                    ),
+                  );
                 }
               });
             },
@@ -40,6 +48,10 @@ class _POIListState extends State<POIList> {
               const PopupMenuItem(
                 value: Menu.logOut,
                 child: Text("Cerrar sesión"),
+              ),
+              const PopupMenuItem(
+                value: Menu.favorites,
+                child: Text("Favoritos"),
               ),
             ],
           ),
@@ -57,9 +69,11 @@ class _POIListState extends State<POIList> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => POIPage(
-                              documentId:
-                                  snapshot.data!.docs.elementAt(index).id)),
+                        builder: (context) => POIPage(
+                            documentId:
+                                snapshot.data!.docs.elementAt(index).id
+                        ),
+                      ),
                     ),
                     title:
                         Text(snapshot.data?.docs.elementAt(index).get("name")),
