@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:town_app/models/poi.dart';
+import 'package:town_app/pages/map_page.dart';
 
 class POIPage extends StatefulWidget {
   final String documentId;
@@ -114,6 +115,21 @@ class _POIPageState extends State<POIPage> {
                       height: 20,
                     ),
                     Text("Puntuación: ${"⭐" * data["punctuation"]}"),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MapPage(poi: POI.fromJson(data)),
+                            )
+                        );
+                      }, 
+                      icon: const Icon(Icons.map),
+                      label: const Text("Ver en mapa"),
+                    ),
                   ],
                 ),
               );
