@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:town_app/hive_boxes.dart';
-import 'package:town_app/models/local_poi.dart';
 import 'package:town_app/models/poi.dart';
 
 class POIPage extends StatefulWidget {
@@ -17,23 +16,46 @@ class _POIPageState extends State<POIPage> {
   CollectionReference poiCollection = FirebaseFirestore.instance.collection("points_of_interest");
   IconData favoriteIcon = Icons.favorite_border;
 
-  void addPOIToFavorites(POI poi) {
-    if (HiveBoxes.getFavoritesBox().containsKey(poi.id)) {
-      HiveBoxes.getFavoritesBox().delete(poi.id);
-      setState(() {
-        favoriteIcon = Icons.favorite_border;
-      });
-    } else {
-      final localPoi = LocalPOI()
-        ..id = poi.id
-        ..name = poi.name
-        ..description = poi.description
-        ..photoUrl = poi.photoUrl
-        ..punctuation = poi.punctuation;
-      HiveBoxes.getFavoritesBox().put(poi.id, localPoi);
-      setState(() {
-        favoriteIcon = Icons.favorite;
-      });
+  void addPOIToFavorites(POI poi) async {
+    try {
+      final userUid = FirebaseAuth.instance.currentUser?.uid;
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance.collection("users").doc(userUid).get();
+      Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
+      List<dynamic> favorites = userData["favorites"] ?? [];
+      if (!favorites.contains(poi.id)) {
+        favorites.add(poi.id);
+        setState(() {
+          favoriteIcon = Icons.favorite;
+        });
+      } else {
+        favorites.remove(poi.id);
+        setState(() {
+          favoriteIcon = Icons.favorite_border;
+        });
+      }
+      userData["favorites"] = favorites;
+      await FirebaseFirestore.instance.collection("users").doc(userUid).update(userData);
+    } on FirebaseException catch (e) {
+      print("Error saving favorite: ${e.code}");
+    }
+  }
+
+  void setFavoriteIcon(String id) async {
+    try {
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+      var userData = await FirebaseFirestore.instance.collection("users").doc(userId).get();
+      List<dynamic> favorites = userData.data()!["favorites"] ?? [];
+      if (favorites.contains(id)) {
+        setState(() {
+          favoriteIcon = Icons.favorite;
+        });
+      } else {
+        setState(() {
+          favoriteIcon = Icons.favorite_border;
+        });
+      }
+    } catch (e, s) {
+      print(s);
     }
   }
 
@@ -42,13 +64,6 @@ class _POIPageState extends State<POIPage> {
     final String document = widget.documentId;
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          tooltip: "Retroceder",
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         title: const Text('Detalle Sitio Turístico POI'),
       ),
       body: Padding(
@@ -62,6 +77,7 @@ class _POIPageState extends State<POIPage> {
 
             if (snapshot.hasData) {
               Map<String, dynamic> data = snapshot.data?.data() as Map<String, dynamic>;
+              setFavoriteIcon(snapshot.data!.id);
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,

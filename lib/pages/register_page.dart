@@ -70,7 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() {
       if (_password.text == _repPassword.text) {
         String gender = _gender == Gender.masculino ? "Masculino" : "Femenino";
-        var user = User("", _name.text, _email.text, _password.text, gender, dateinput.text);
+        var user = User("", _name.text, _email.text, _password.text, gender, dateinput.text, []);
         _registerUser(user);
       } else {
         _showMsg("Las contraseñas deben ser iguales");
