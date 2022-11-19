@@ -15,9 +15,6 @@ class _FavoritesListState extends State<FavoritesList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Favoritos"),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Center(child: _buildListView()),
@@ -62,12 +59,14 @@ class _FavoritesListState extends State<FavoritesList> {
                     ),
                     title: Text(poi.name ?? "Sin titulo"),
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => POIPage(documentId: poi.id ?? ""),
-                        )
-                      );
+                      setState(() async {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => POIPage(documentId: poi.id ?? ""),
+                            )
+                        ).then(onGoBackFromPoiPage);
+                      });
                     },
                   ),
                 );
@@ -82,5 +81,9 @@ class _FavoritesListState extends State<FavoritesList> {
 
       },
     );
+  }
+
+  void onGoBackFromPoiPage(dynamic value) {
+    setState(() {});
   }
 }

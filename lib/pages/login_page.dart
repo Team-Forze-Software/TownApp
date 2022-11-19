@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:town_app/pages/poi_list.dart';
+import 'package:town_app/pages/home_page.dart';
 import 'package:town_app/pages/register_page.dart';
 import 'package:town_app/repositories/user_repository.dart';
 
@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
         msg = "Bienvenido";
         setState(() {
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => const POIList()));
+              context, MaterialPageRoute(builder: (context) => const HomePage()));
         });
       }
       _showMsg(msg);

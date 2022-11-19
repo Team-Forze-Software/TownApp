@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.team_forze.town_app">
    <application
-        android:label="town_app"
+        android:label="TownApp"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

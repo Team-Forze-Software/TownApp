@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         Locale("es", "CO"),
       ],
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
       ),
       home: const SplashPage(),
     );

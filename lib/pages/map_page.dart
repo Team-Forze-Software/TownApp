@@ -16,13 +16,14 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("'${widget.poi.name}' en mapa"),),
+      appBar: AppBar(title: Text("Mapa"),),
       body: FlutterMap(
         mapController: MapController(),
         options: MapOptions(
           center: LatLng(widget.poi.location.latitude, widget.poi.location.longitude),
           interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
           maxZoom: 18.0,
+          minZoom: 5.0,
           zoom: 12.0
         ),
         children: [
@@ -36,20 +37,17 @@ class _MapPageState extends State<MapPage> {
                 point: LatLng(widget.poi.location.latitude, widget.poi.location.longitude),
                 anchorPos: AnchorPos.align(AnchorAlign.top,),
                 width: 300,
-                height: 150,
+                height: 52,
                 builder: (context) => Column(
                   children: [
                     Card(
                       child: Column(
                         children: [
-                          Image.network(widget.poi.photoUrl, height: 80, width: 200, fit: BoxFit.cover, alignment: Alignment.center),
-                          const SizedBox(height: 10,),
                           Text(widget.poi.name, style: const TextStyle(fontSize: 12),),
-                          const SizedBox(height: 10,),
                         ],
                       ),
                     ),
-                    const Icon(Icons.location_on, color: Colors.red,),
+                    const Icon(Icons.location_on, color: Colors.green,size: 30,),
                   ],
                 ),
               )

@@ -13,7 +13,6 @@ class POIList extends StatefulWidget {
   State<POIList> createState() => _POIListState();
 }
 
-enum Menu { logOut, favorites }
 
 class _POIListState extends State<POIList> {
   CollectionReference poiData =
@@ -22,41 +21,6 @@ class _POIListState extends State<POIList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Lista de Puntos de Interés"),
-        actions: [
-          PopupMenuButton(
-            onSelected: (Menu item) {
-              setState(() {
-                if (item == Menu.logOut) {
-                  FirebaseAuth.instance.signOut();
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginPage()));
-                } else if (item == Menu.favorites) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const FavoritesList(),
-                    ),
-                  );
-                }
-              });
-            },
-            itemBuilder: (context) => <PopupMenuEntry<Menu>>[
-              const PopupMenuItem(
-                value: Menu.logOut,
-                child: Text("Cerrar sesión"),
-              ),
-              const PopupMenuItem(
-                value: Menu.favorites,
-                child: Text("Favoritos"),
-              ),
-            ],
-          ),
-        ],
-      ),
       body: FutureBuilder(
         future: poiData.get(),
         builder: (context, snapshot) {
